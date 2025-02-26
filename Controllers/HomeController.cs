@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EliteTGTask.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EliteTGTask.Controllers
 {
@@ -24,20 +25,44 @@ namespace EliteTGTask.Controllers
                 .OrderByDescending(p => p.CreatedAt)
                 .AsQueryable();
 
+            // Kerkim me ane te keyword
             if (!string.IsNullOrEmpty(SearchKeyword))
             {
                 postsQuery = postsQuery.Where(p => p.Title.Contains(SearchKeyword) || p.Description.Contains(SearchKeyword));
             }
-
+            // Kerkim me ane te kategorise
             if (categoryId > 0)
             {
                 postsQuery = postsQuery.Where(p => p.PostCategories.Any(pc => pc.CategoryId == categoryId));
             }
 
+            // Ketu bejme kerkesen per te pasur vetem 10 poste brenda container-it normal
 
+            int PageSize = 10;
+            var posts = await postsQuery.Skip((page-1) * PageSize).Take(PageSize).ToListAsync();
+
+            ViewBag.Page = page;
+            ViewBag.TotalPages = Math.Ceiling((double)await postsQuery.CountAsync() / PageSize);
+
+
+            return View(posts);
+        }
+
+        // Ketu do krijohen postime, vetem per rolin e editors
+        [HttpGet]
+        [Authorize(Roles ="Editor")]
+        public IActionResult CreatePost()
+        {
             return View();
         }
 
+        [HttpPost]
+        [Authorize(Roles ="Editor")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreatePost(Post Model)
+        {
+            return View(Model);
+        }
 
         public IActionResult Index()
         {
