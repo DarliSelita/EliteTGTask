@@ -15,7 +15,7 @@ namespace EliteTGTask.Controllers
             _dbContext = dbContext;
         }
 
-        // Blog Index
+        // Controller per faqen kryesore te blog-ut
         public async Task<IActionResult> Index(string SearchKeyword, int categoryId = 0, int page = 1)
         {
             var postsQuery = _dbContext.Posts
@@ -61,23 +61,14 @@ namespace EliteTGTask.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreatePost(Post Model)
         {
+            if (ModelState.IsValid)
+            {
+                Model.CreatedAt = DateTime.Now;
+                _dbContext.Add(Model);
+                await _dbContext.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
             return View(Model);
-        }
-
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
