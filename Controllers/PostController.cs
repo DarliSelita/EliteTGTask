@@ -51,5 +51,18 @@ namespace EliteTGTask.Controllers
             return View(Model);
         }
 
+        //Delete Action
+
+        [HttpGet]
+        [Authorize(Roles = "Editor")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var post = await _Context.Posts.FindAsync(id);
+            if (post == null) return NotFound();
+
+            _Context.Posts.Remove(post);
+            await _Context.SaveChangesAsync();
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
