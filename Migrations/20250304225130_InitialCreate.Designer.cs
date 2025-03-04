@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EliteTGTask.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250226144628_InitialCreate")]
+    [Migration("20250304225130_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

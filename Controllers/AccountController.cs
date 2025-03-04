@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using EliteTGTask.Models;
+using EliteTGTask.Models.ViewModels;
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Server.HttpSys;
 using Amazon.S3;
@@ -36,7 +37,7 @@ namespace EliteTGTask.Controllers
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = Model.Username, FullName = Model.FullName };
-                var result = await _userManager.CreateAsync(user, Model.Password());
+                var result = await _userManager.CreateAsync(user, Model.Password);
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, "Member");
@@ -67,7 +68,7 @@ namespace EliteTGTask.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(Model.Username, Model.Password, _userManager);
+                var result = await _signInManager.PasswordSignInAsync(Model.Username, Model.Password, Model.RememberMe, false);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index", "Home");
@@ -85,9 +86,10 @@ namespace EliteTGTask.Controllers
             return RedirectToAction("Login");
         }
 
-        public IActionResult Index()
+        public IActionResult AccessDenied()
         {
             return View();
         }
+
     }
 }
