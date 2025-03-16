@@ -10,10 +10,17 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDBContext>();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+})
+    .AddEntityFrameworkStores<ApplicationDBContext>()
+    .AddDefaultTokenProviders();
+
+
+
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
 // Percaktojme paths ne menyre qe te implementojme authorization
 
@@ -56,3 +63,5 @@ app.MapRazorPages()
    .WithStaticAssets();
 
 app.Run();
+
+

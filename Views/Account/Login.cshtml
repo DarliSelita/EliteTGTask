@@ -1,0 +1,27 @@
+﻿@model EliteTGTask.Models.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <h2 class="text-center">Login</h2>
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" asp-for="Username" class="form-control" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" asp-for="Password" class="form-control" required />
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" asp-for="RememberMe" class="form-check-input" />
+                <label class="form-check-label" asp-for="RememberMe">Remember Me</label>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+    </div>
+</div>

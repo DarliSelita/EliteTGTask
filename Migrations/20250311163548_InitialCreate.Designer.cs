@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EliteTGTask.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250304225130_InitialCreate")]
+    [Migration("20250311163548_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -105,9 +105,9 @@ namespace EliteTGTask.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@BLOG.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDn9Alfb2+L1ugcsgxY...",
+                            PasswordHash = "AQAAAAIAAYagAAAAEL/yTcc+DgnF5qmPg0KIOET1yIr5Uj0CEHzHCDlHK3d+2o/1KA78LcVNcpS3FWBllw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "12345",
+                            SecurityStamp = "static-security-stamp",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -173,7 +173,7 @@ namespace EliteTGTask.Migrations
                         new
                         {
                             Id = 9,
-                            Name = "WAr"
+                            Name = "War"
                         },
                         new
                         {
@@ -372,12 +372,10 @@ namespace EliteTGTask.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -421,12 +419,10 @@ namespace EliteTGTask.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");

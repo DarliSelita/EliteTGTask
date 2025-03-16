@@ -1,0 +1,43 @@
+﻿@model List<EliteTGTask.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<h2>User Management</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Full Name</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.FullName</td>
+                <td>
+                    <form method="post" asp-action="ChangeRole">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <select name="role" class="form-select">
+                            <option>Admin</option>
+                            <option>Editor</option>
+                            <option>Member</option>
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-warning">Change</button>
+                    </form>
+                </td>
+                <td>
+                    <form method="post" asp-action="DeleteUser">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

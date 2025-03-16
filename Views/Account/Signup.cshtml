@@ -1,0 +1,32 @@
+﻿@model EliteTGTask.Models.ViewModels.SignupViewModel
+
+@{
+    ViewData["Title"] = "Signup";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <h2 class="text-center">Signup</h2>
+        <form method="post" asp-action="Signup">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <input type="text" asp-for="FullName" class="form-control" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" asp-for="Username" class="form-control" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" asp-for="Password" class="form-control" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" asp-for="ConfirmPassword" class="form-control" required />
+            </div>
+            <button type="submit" class="btn btn-success w-100">Signup</button>
+        </form>
+    </div>
+</div>

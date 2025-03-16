@@ -3,26 +3,29 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
-    using System.Reflection.Emit;
 
     public class ApplicationDBContext : IdentityDbContext<ApplicationUser>
     {
+        private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
 
-        // Remember Liskov Rule in SOLID, always use bigger instances of deriving classes, not of the class thats deriving
-        public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options) { }
+        public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options, IPasswordHasher<ApplicationUser> passwordHasher)
+            : base(options)
+        {
+            _passwordHasher = passwordHasher;
+        }
+
         public DbSet<Post> Posts { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<PostCategory> PostCategories { get; set; }
         public DbSet<Comment> Comments { get; set; }
 
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder); // Call the function base in order to configure Identity tables, REMEMBER SI TEK KONSTRUKTORI
+            base.OnModelCreating(builder);
 
-            // Krijon nje many to many relationship per klasen e Post Category ( 1 postim mund te jete pjese e shume kategorive, si dhe cdo kategori mund te kete shume postime)
+            // Many-to-many relationship for PostCategory
             builder.Entity<PostCategory>()
-                .HasKey(pc => new { pc.PostId, pc.CategoryId }); // Celes kryesor per te identifikuar ne menyr unike 1 post dhe 1 kategori 
+                .HasKey(pc => new { pc.PostId, pc.CategoryId });
 
             builder.Entity<PostCategory>()
                 .HasOne(pc => pc.Post)
@@ -54,37 +57,37 @@
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Seed rolet e kerkuara ne task: Admin, Editor dhe Member
+            // Seed roles
             builder.Entity<IdentityRole>().HasData(
                 new IdentityRole { Id = "1", Name = "Admin", NormalizedName = "ADMIN" },
                 new IdentityRole { Id = "2", Name = "Editor", NormalizedName = "EDITOR" },
                 new IdentityRole { Id = "3", Name = "Member", NormalizedName = "MEMBER" }
             );
+            // Hashi per "admin1234" eshte marre nga 1 instance e bere run 
+            var hardcodedHashedPassword = "AQAAAAIAAYagAAAAEL/yTcc+DgnF5qmPg0KIOET1yIr5Uj0CEHzHCDlHK3d+2o/1KA78LcVNcpS3FWBllw==";
 
-            builder.Entity<ApplicationUser>().HasData(
-                 new ApplicationUser
-                 {
-                     Id = "admin-id",
-                     UserName = "admin",
-                     NormalizedUserName = "ADMIN",
-                     Email = "admin@blog.com",
-                     NormalizedEmail = "ADMIN@BLOG.COM",
-                     EmailConfirmed = true,
-                     PasswordHash = "AQAAAAIAAYagAAAAEDn9Alfb2+L1ugcsgxY...",
-                     SecurityStamp = "12345",
-                     ConcurrencyStamp = "static-concurrency-stamp",
-                     FullName = "Admin",
-                 }
+            var admin = new ApplicationUser
+            {
+                Id = "admin-id",
+                UserName = "admin",
+                NormalizedUserName = "ADMIN",
+                Email = "admin@blog.com",
+                NormalizedEmail = "ADMIN@BLOG.COM",
+                EmailConfirmed = true,
+                PasswordHash = hardcodedHashedPassword, // Use the hardcoded hash
+                SecurityStamp = "static-security-stamp",
+                ConcurrencyStamp = "static-concurrency-stamp",
+                FullName = "Admin",
+            };
 
-                 );
-         
-            // I bejme assign seeded account rolin e adminit *REMEMBER DARL*
-                     builder.Entity<IdentityUserRole<string>>().HasData(
+            builder.Entity<ApplicationUser>().HasData(admin);
+
+            // Assign the admin role to the seeded user
+            builder.Entity<IdentityUserRole<string>>().HasData(
                 new IdentityUserRole<string> { UserId = "admin-id", RoleId = "1" }
+            );
 
-                );
-
-            // Gjithashtu bejme seed kategorite e kerkuara ne task
+            // Seed categories
             builder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Nature" },
                 new Category { Id = 2, Name = "Sport" },
@@ -94,11 +97,9 @@
                 new Category { Id = 6, Name = "Science" },
                 new Category { Id = 7, Name = "Entertainment" },
                 new Category { Id = 8, Name = "News" },
-                new Category { Id = 9, Name = "WAr" },
+                new Category { Id = 9, Name = "War" },
                 new Category { Id = 10, Name = "Showbiz" }
-
-               );
-
+            );
         }
     }
 }

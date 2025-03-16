@@ -112,8 +112,8 @@ namespace EliteTGTask.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -157,8 +157,8 @@ namespace EliteTGTask.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -272,7 +272,7 @@ namespace EliteTGTask.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "admin-id", 0, "static-concurrency-stamp", "admin@blog.com", true, "Admin", false, null, "ADMIN@BLOG.COM", "ADMIN", "AQAAAAIAAYagAAAAEDn9Alfb2+L1ugcsgxY...", null, false, "12345", false, "admin" });
+                values: new object[] { "admin-id", 0, "static-concurrency-stamp", "admin@blog.com", true, "Admin", false, null, "ADMIN@BLOG.COM", "ADMIN", "AQAAAAIAAYagAAAAEL/yTcc+DgnF5qmPg0KIOET1yIr5Uj0CEHzHCDlHK3d+2o/1KA78LcVNcpS3FWBllw==", null, false, "static-security-stamp", false, "admin" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
@@ -287,7 +287,7 @@ namespace EliteTGTask.Migrations
                     { 6, "Science" },
                     { 7, "Entertainment" },
                     { 8, "News" },
-                    { 9, "WAr" },
+                    { 9, "War" },
                     { 10, "Showbiz" }
                 });
 

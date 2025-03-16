@@ -2,10 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using EliteTGTask.Models;
 using EliteTGTask.Models.ViewModels;
-using System.Linq.Expressions;
-using Microsoft.AspNetCore.Server.HttpSys;
-using Amazon.S3;
-//using EliteTGTask.ViewModels;
 
 namespace EliteTGTask.Controllers
 {

@@ -8,12 +8,10 @@ namespace EliteTGTask.Controllers
     public class AdminController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager; 
 
-        public AdminController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AdminController(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
         }
 
         // Dashboard i Adminit
