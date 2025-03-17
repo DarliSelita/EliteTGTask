@@ -1,0 +1,30 @@
+﻿@model Post
+
+<div class="container">
+    <h2>@Model.Title</h2>
+    <h5 class="text-muted">By @Model.User.FullName on @Model.CreatedAt.ToString("yyyy-MM-dd")</h5>
+    <p>@Model.Description</p>
+
+    <hr />
+
+    <h4>Comments</h4>
+    <div id="commentSection">
+        @foreach (var comment in Model.Comments)
+        {
+            <div class="card my-2">
+                <div class="card-body">
+                    <h6 class="card-subtitle text-muted">@comment.User.FullName</h6>
+                    <p class="card-text">@comment.Text</p>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Member"))
+    {
+        <div class="mt-3">
+            <textarea id="commentText" class="form-control" placeholder="Write a comment..."></textarea>
+            <button id="submitComment" class="btn btn-primary mt-2">Post Comment</button>
+        </div>
+    }
+</div>

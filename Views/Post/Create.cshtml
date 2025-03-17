@@ -1,0 +1,34 @@
+﻿@model EliteTGTask.Models.Post
+@{
+    ViewData["Title"] = "Create Post";
+}
+
+<h2>Create Post</h2>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label">Title</label>
+        <input asp-for="Title" class="form-control" required />
+    </div>    
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Description</label>
+        <textarea asp-for="Description" class="form-control" rows="5" required></textarea>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Categories</label>
+        <select name="CategoryIds" class="form-select" multiple required>
+            @foreach(var category in ViewBag.Categories)
+            {
+                <option value="@category.Id">@category.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Upload Image</label>
+        <input type="file" name="ImageFile" class="form-control" accept="image/*" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Post</button>
+</form>

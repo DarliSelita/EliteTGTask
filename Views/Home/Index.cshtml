@@ -1,8 +1,25 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model List<EliteTGTask.Models.Post>
+
+@{
+    ViewData["Title"] = "Blog";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<h2 class="text-center">Latest Posts</h2>
+<div class="row">
+    @foreach (var post in Model)
+    {
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <img src="@post.ImageUrl" class="card-img-top" alt="Post Image">
+                <div class="card-body">
+                    <h5 class="card-title">@post.Title</h5>
+                    <p class="card-text">@post.Description.Substring(0, Math.Min(100, post.Description.Length))...</p>
+                    <a href="@Url.Action("Details", "Post", new { id = post.Id })" class="btn btn-primary">Read More</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div class="d-flex justify-content-center">
+    <button id="loadMore" class="btn btn-secondary w-40">Load More</button>
 </div>
