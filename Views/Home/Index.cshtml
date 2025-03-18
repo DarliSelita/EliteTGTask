@@ -4,7 +4,32 @@
     ViewData["Title"] = "Blog";
 }
 
-<h2 class="text-center">Latest Posts</h2>
+<h2 class="text-center mb-4">Latest Posts</h2>
+
+<!-- Search & Filter Form -->
+<form method="get" class="mb-4">
+    <div class="row">
+        <div class="col-md-5">
+            <input type="text" name="SearchKeyword" class="form-control" placeholder="Search by keyword..." value="@Context.Request.Query["SearchKeyword"]">
+        </div>
+        <div class="col-md-4">
+            <select name="categoryId" class="form-select">
+                <option value="0">All Categories</option>
+                @foreach (var category in ViewBag.Categories)
+                {
+                    <option value="@category.Id" selected="@(Context.Request.Query["categoryId"] == category.Id.ToString() ? "selected" : null)">
+                        @category.Name
+                    </option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary w-100">Filter</button>
+        </div>
+    </div>
+</form>
+
+<!-- Blog Posts List -->
 <div class="row">
     @foreach (var post in Model)
     {
@@ -14,12 +39,15 @@
                 <div class="card-body">
                     <h5 class="card-title">@post.Title</h5>
                     <p class="card-text">@post.Description.Substring(0, Math.Min(100, post.Description.Length))...</p>
+
                     <a href="@Url.Action("Details", "Post", new { id = post.Id })" class="btn btn-primary">Read More</a>
+
+                    <!-- Export to Excel Button -->
+                    <a href="@Url.Action("ExportPostToExcel", "Home", new { id = post.Id })" class="btn btn-success ms-2">
+                        Download as Excel
+                    </a>
                 </div>
             </div>
         </div>
     }
-</div>
-<div class="d-flex justify-content-center">
-    <button id="loadMore" class="btn btn-secondary w-40">Load More</button>
 </div>

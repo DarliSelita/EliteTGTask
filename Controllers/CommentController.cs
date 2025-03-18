@@ -18,25 +18,19 @@ namespace EliteTGTask.Controllers
             _logger = logger;
         }
 
-        // Add Comment via AJAX
-        [HttpPost]
-        [HttpPost]
+        // Add comment via POST
         [HttpPost]
         public async Task<IActionResult> AddComment(int postId, string text)
         {
-            _logger.LogInformation("Received request to add comment. Post ID: {PostId}, Text: {Text}", postId, text);
-
             // Validate input
             if (string.IsNullOrEmpty(text))
             {
-                _logger.LogWarning("Comment text is null or empty.");
                 return BadRequest("Comment text cannot be empty.");
             }
 
             // Check if the user is authenticated and authorized
             if (!User.Identity.IsAuthenticated || !User.IsInRole("Member"))
             {
-                _logger.LogWarning("Unauthorized attempt to add a comment.");
                 return Unauthorized();
             }
 
@@ -44,7 +38,6 @@ namespace EliteTGTask.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                _logger.LogError("Authenticated user not found in database.");
                 return Unauthorized();
             }
 
@@ -61,9 +54,8 @@ namespace EliteTGTask.Controllers
                 // Add the comment to the database
                 _dbContext.Comments.Add(comment);
                 await _dbContext.SaveChangesAsync();
-                _logger.LogInformation("Comment added successfully. Comment ID: {CommentId}", comment.Id);
 
-                // Return the response
+                // Return the response with comment details
                 return Json(new
                 {
                     username = user.FullName,
@@ -71,14 +63,13 @@ namespace EliteTGTask.Controllers
                     commentId = comment.Id
                 });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Log the exception
-                _logger.LogError(ex, "Error occurred while adding comment.");
                 return StatusCode(500, "Internal Server Error.");
             }
         }
 
+        // Edit comment via POST
         [HttpPost]
         public async Task<IActionResult> EditComment(int commentId, string text)
         {
@@ -102,18 +93,33 @@ namespace EliteTGTask.Controllers
 
             // Update the comment text
             comment.Text = text;
-            comment.UpdatedAt = DateTime.Now; // Optional: Track when the comment was updated
+            comment.UpdatedAt = DateTime.Now;
 
             try
             {
                 await _dbContext.SaveChangesAsync();
                 return Json(new { success = true });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _logger.LogError(ex, "Error occurred while updating comment.");
                 return StatusCode(500, "Internal Server Error.");
             }
+        }
+
+        // Delete comment via POST
+        [HttpPost]
+        public async Task<IActionResult> DeleteComment(int commentId)
+        {
+            var comment = await _dbContext.Comments.FindAsync(commentId);
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
+            _dbContext.Comments.Remove(comment);
+            await _dbContext.SaveChangesAsync();
+
+            return Json(new { success = true });
         }
     }
 }

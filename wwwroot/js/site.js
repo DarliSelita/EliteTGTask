@@ -135,7 +135,7 @@
                 data: { commentId: commentId },
                 success: function (response) {
                     if (response.success) {
-                        $("#comment-" + commentId).remove(); // Remove the comment from the UI
+                        $("#comment-" + commentId).remove(); 
                     } else {
                         alert("Failed to delete the comment.");
                     }

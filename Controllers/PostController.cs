@@ -132,17 +132,13 @@ namespace EliteTGTask.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // In PostController.cs
 
-        [HttpGet]
-        // In PostController.cs
-
-        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             var post = await _Context.Posts
-                .Include(p => p.Comments) // Include related comments
-                .Include(p => p.User) // Include user information (if not loaded already)
+                .Include(p => p.User) // Load the post author
+                .Include(p => p.Comments)
+                .ThenInclude(c => c.User) // Load the users for comments
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (post == null)
@@ -150,8 +146,9 @@ namespace EliteTGTask.Controllers
                 return NotFound();
             }
 
-            return View(post); // Return the single post to the Details view
+            return View(post);
         }
+
 
 
 
