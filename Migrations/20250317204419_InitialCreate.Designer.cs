@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EliteTGTask.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250311163548_InitialCreate")]
+    [Migration("20250317204419_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -237,7 +237,6 @@ namespace EliteTGTask.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
