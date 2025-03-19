@@ -1,10 +1,7 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EliteTGTask.Models;
-using Microsoft.AspNetCore.Authorization;
 using ClosedXML.Excel;
-using System.IO;
 
 namespace EliteTGTask.Controllers
 {
@@ -52,29 +49,7 @@ namespace EliteTGTask.Controllers
             return View(posts);
         }
 
-
-        // Ketu do krijohen postime, vetem nga editors duke perdorur authorize
-        [HttpGet]
-        [Authorize(Roles = "Editor")]
-        public IActionResult CreatePost()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Editor")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreatePost(Post Model)
-        {
-            if (ModelState.IsValid)
-            {
-                Model.CreatedAt = DateTime.Now;
-                _dbContext.Add(Model);
-                await _dbContext.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            return View(Model);
-        }
+        // Per kete me eshte dashur te perdor ndihmen e AI, per te kuptuar se si behet metoda
         public IActionResult ExportPostToExcel(int id)
         {
             var post = _dbContext.Posts

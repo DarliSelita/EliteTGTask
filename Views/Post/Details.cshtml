@@ -1,16 +1,13 @@
 ﻿@model EliteTGTask.Models.Post
 
 <div class="container">
-    <!-- Post Title -->
     <h2>@Model.Title</h2>
 
-    <!-- Post Author and Date -->
     @if (Model.User != null)
     {
         <h5 class="text-muted">By @Model.User.FullName on @Model.CreatedAt.ToString("yyyy-MM-dd")</h5>
     }
 
-    <!-- Post Photo -->
     @if (!string.IsNullOrEmpty(Model.ImageUrl))
     {
         <div class="my-4">
@@ -18,12 +15,10 @@
         </div>
     }
 
-    <!-- Post Description -->
     <p>@Model.Description</p>
 
     <hr />
 
-    <!-- Comments Section -->
     <h4>Comments</h4>
     <div id="commentSection">
         @if (Model.Comments != null && Model.Comments.Any())
@@ -32,7 +27,6 @@
             {
                 <div class="card my-2" id="comment-@comment.Id">
                     <div class="card-body">
-                        <!-- Display Comment User -->
                         @if (comment.User != null)
                         {
                             <h6 class="card-subtitle text-muted">@comment.User.FullName</h6>
@@ -44,13 +38,11 @@
 
                         <p class="card-text">@comment.Text</p>
 
-                        <!-- Display UpdatedAt if the comment has been updated -->
                         @if (comment.UpdatedAt.HasValue)
                         {
                             <small class="text-muted">Last updated: @comment.UpdatedAt.Value.ToString("yyyy-MM-dd HH:mm")</small>
                         }
 
-                        <!-- Edit Button for the current user's comments -->
                         @if (User.Identity.IsAuthenticated && comment.UserId == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value)
                         {
                             <button class="btn btn-sm btn-warning edit-comment" data-comment-id="@comment.Id">Edit</button>
@@ -71,7 +63,6 @@
         }
     </div>
 
-    <!-- Comment Form for Members -->
     @if (User.Identity.IsAuthenticated && User.IsInRole("Member"))
     {
         <div class="container">

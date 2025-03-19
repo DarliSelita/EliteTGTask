@@ -23,7 +23,7 @@
         {
             base.OnModelCreating(builder);
 
-            // Many-to-many relationship for PostCategory
+            // Many-to-many relationship for PostCategory **cascade ben delete te gjithe rekording nga te gjitha tabelat
             builder.Entity<PostCategory>()
                 .HasKey(pc => new { pc.PostId, pc.CategoryId });
 
@@ -63,7 +63,7 @@
                 new IdentityRole { Id = "2", Name = "Editor", NormalizedName = "EDITOR" },
                 new IdentityRole { Id = "3", Name = "Member", NormalizedName = "MEMBER" }
             );
-            // Hashi per "admin1234" eshte marre nga 1 instance e bere run 
+            // Hashi per "admin1234" eshte marre nga 1 hash converter online, ndoshta ka ndonje menyre me te mire, por migrationi ka problem me te dhena qe nuk jane statike, ne kete rast passwordi qe une do krijoja "admin1234"
             var hardcodedHashedPassword = "AQAAAAIAAYagAAAAEL/yTcc+DgnF5qmPg0KIOET1yIr5Uj0CEHzHCDlHK3d+2o/1KA78LcVNcpS3FWBllw==";
 
             var admin = new ApplicationUser
@@ -74,7 +74,7 @@
                 Email = "admin@blog.com",
                 NormalizedEmail = "ADMIN@BLOG.COM",
                 EmailConfirmed = true,
-                PasswordHash = hardcodedHashedPassword, // Use the hardcoded hash
+                PasswordHash = hardcodedHashedPassword,
                 SecurityStamp = "static-security-stamp",
                 ConcurrencyStamp = "static-concurrency-stamp",
                 FullName = "Admin",
@@ -82,12 +82,11 @@
 
             builder.Entity<ApplicationUser>().HasData(admin);
 
-            // Assign the admin role to the seeded user
             builder.Entity<IdentityUserRole<string>>().HasData(
                 new IdentityUserRole<string> { UserId = "admin-id", RoleId = "1" }
             );
 
-            // Seed categories
+            
             builder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Nature" },
                 new Category { Id = 2, Name = "Sport" },

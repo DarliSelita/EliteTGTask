@@ -5,10 +5,11 @@ using EliteTGTask.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// Krijova variable e cila mban connection string tek appsettings.json
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseSqlServer(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddDatabaseDeveloperPageExceptionFilter(); 
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
@@ -18,12 +19,12 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     .AddDefaultTokenProviders();
 
 
-
+// Perdoret per konfigurimin e MVC Services
 builder.Services.AddControllersWithViews();
+//Shton services te Razor Pages 
 builder.Services.AddRazorPages();
 
 // Percaktojme paths ne menyre qe te implementojme authorization
-
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
@@ -48,7 +49,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+// Perdorim authentication dhe authorization ne baze te kerkesave te taskut
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -61,7 +62,7 @@ app.MapControllerRoute(
 
 app.MapRazorPages()
    .WithStaticAssets();
-
+// Run function
 app.Run();
 
 

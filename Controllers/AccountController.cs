@@ -25,7 +25,7 @@ namespace EliteTGTask.Controllers
             return View();
         }
 
-        // Ketu behet POST ose dergojm te dhenat per krijimin e nje acc te ri (breakpoint tek line i krijimit te user per te pare nese vjen gje apo jo)
+        // Ketu behet POST ose dergojm te dhenat per krijimin e nje acc te ri
         [HttpPost]
         [ActionName("Signup")]
         public async Task<IActionResult> Signup(SignupViewModel Model)
@@ -74,7 +74,6 @@ namespace EliteTGTask.Controllers
             return View(Model);
         }
 
-        // Log Out
 
         public async Task<IActionResult> Logout()
         {

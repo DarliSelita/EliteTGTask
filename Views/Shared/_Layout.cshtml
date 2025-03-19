@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - EliteTGTask</title>
-
+    <!--Bejme include jquery dhe site.js ne mneyre qe te perdorim funksionalitetin e tyre -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -25,7 +25,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-
+                       <!-- Ne baze te rolit qe ka acc, ne navbar paraqitet UserManagement per admin-in, ose Create Post per Editor-in -->
                         @if (User.Identity.IsAuthenticated)
                         {
                             @if (User.IsInRole("Admin"))
@@ -42,6 +42,7 @@
                             }
                         }
                     </ul>
+                    <!--Partial View i cili ne kete rast ben render tek navbar-i butonat per login/signup-->
                     <partial name="_LoginPartial" />
                 </div>
 
@@ -50,6 +51,7 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            <!--Funksioni i cili ben render nje view i cili nuk eshte pjese e view universal, per te gjithe user-at-->
             @RenderBody()
         </main>
     </div>

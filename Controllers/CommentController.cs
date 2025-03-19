@@ -1,7 +1,6 @@
 ﻿using EliteTGTask.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace EliteTGTask.Controllers
 {
@@ -22,26 +21,23 @@ namespace EliteTGTask.Controllers
         [HttpPost]
         public async Task<IActionResult> AddComment(int postId, string text)
         {
-            // Validate input
             if (string.IsNullOrEmpty(text))
             {
                 return BadRequest("Comment text cannot be empty.");
             }
 
-            // Check if the user is authenticated and authorized
+            // Nese user nuk eshte i tipit member, nuk i lejohet te komentoje
             if (!User.Identity.IsAuthenticated || !User.IsInRole("Member"))
             {
                 return Unauthorized();
             }
 
-            // Get the current user
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 return Unauthorized();
             }
 
-            // Create the comment
             var comment = new Comment
             {
                 postId = postId,
@@ -51,11 +47,9 @@ namespace EliteTGTask.Controllers
 
             try
             {
-                // Add the comment to the database
                 _dbContext.Comments.Add(comment);
                 await _dbContext.SaveChangesAsync();
 
-                // Return the response with comment details
                 return Json(new
                 {
                     username = user.FullName,
@@ -69,7 +63,6 @@ namespace EliteTGTask.Controllers
             }
         }
 
-        // Edit comment via POST
         [HttpPost]
         public async Task<IActionResult> EditComment(int commentId, string text)
         {
@@ -84,14 +77,13 @@ namespace EliteTGTask.Controllers
                 return NotFound();
             }
 
-            // Check if the current user is the owner of the comment
+            // Kontrollo nese user-i eshte ai aktuali apo jo
             var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             if (comment.UserId != currentUserId)
             {
                 return Unauthorized();
             }
 
-            // Update the comment text
             comment.Text = text;
             comment.UpdatedAt = DateTime.Now;
 
@@ -106,7 +98,6 @@ namespace EliteTGTask.Controllers
             }
         }
 
-        // Delete comment via POST
         [HttpPost]
         public async Task<IActionResult> DeleteComment(int commentId)
         {

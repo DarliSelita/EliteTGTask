@@ -3,19 +3,21 @@
 
     let skip = 10;
 
-    // Load more posts
+    // AJAX function per te bere asynchronous request pa u nevojitur reload i faqes
     $("#loadMoreBtn").click(function () {
         $.ajax({
+            // Perdor si url controller/emrinEMetodes
             url: "/Post/LoadMorePosts",
-            type: "GET",
+            type: "GET"
             data: { skip: skip },
             success: function (posts) {
                 if (posts.length === 0) {
-                    $("#loadMoreBtn").hide();
+                    $("#loadMoreBtn").hide(); 
                 } else {
                     posts.forEach(post => {
                         $("#postContainer").append(`
                             <div class="card mb-3">
+                                <img src="${post.imageUrl}" class="card-img-top" alt="Post Image">
                                 <div class="card-body">
                                     <h5 class="card-title">${post.title}</h5>
                                     <h6 class="card-subtitle text-muted">By ${post.author} on ${post.createdDate}</h6>
@@ -29,8 +31,10 @@
             }
         });
     });
+});
 
-    // Event listener for the "Post Comment" button
+
+    // Shto nje koment
     $(document).on("click", ".post-comment", function () {
         var postId = $(this).data("post-id");
         var commentText = $(this).siblings("textarea.comment-text").val();
@@ -45,7 +49,6 @@
             type: "POST",
             data: { postId: postId, text: commentText },
             success: function (response) {
-                // Update the UI with the new comment
                 var newCommentHtml = `
                     <div class="card my-2" id="comment-${response.commentId}">
                         <div class="card-body">
@@ -57,7 +60,6 @@
                 `;
                 $("#commentSection").append(newCommentHtml);
 
-                // Clear the textarea
                 $("textarea.comment-text").val('');
             },
             error: function (xhr, status, error) {
@@ -66,13 +68,11 @@
         });
     });
 
-    // Event listener for the "Edit Comment" button
     $(document).on("click", ".edit-comment", function () {
         var commentId = $(this).data("comment-id");
         var commentTextElement = $(this).siblings("p.card-text");
         var commentText = commentTextElement.text();
 
-        // Replace the comment text with an editable textarea
         commentTextElement.replaceWith(`
             <textarea class="form-control edit-comment-text">${commentText}</textarea>
             <button class="btn btn-sm btn-success save-comment" data-comment-id="${commentId}">Save</button>
@@ -80,7 +80,6 @@
         `);
     });
 
-    // Event listener for the "Save Comment" button
     $(document).on("click", ".save-comment", function () {
         var commentId = $(this).data("comment-id");
         var updatedText = $(this).siblings("textarea.edit-comment-text").val();
@@ -96,7 +95,6 @@
             data: { commentId: commentId, text: updatedText },
             success: function (response) {
                 if (response.success) {
-                    // Replace the textarea with the updated comment text
                     var commentHtml = `
                         <p class="card-text">${updatedText}</p>
                         <button class="btn btn-sm btn-warning edit-comment" data-comment-id="${commentId}">Edit</button>
@@ -112,19 +110,18 @@
         });
     });
 
-    // Event listener for the "Cancel Edit" button
     $(document).on("click", ".cancel-edit", function () {
         var commentId = $(this).siblings(".save-comment").data("comment-id");
         var originalText = $(this).siblings("textarea.edit-comment-text").val();
 
-        // Replace the textarea with the original comment text
         $(this).closest(".card-body").html(`
             <p class="card-text">${originalText}</p>
             <button class="btn btn-sm btn-warning edit-comment" data-comment-id="${commentId}">Edit</button>
         `);
     });
 
-    // Event listener for the "Delete Comment" button
+
+    // Delete Komentin
     $(document).on("click", ".delete-comment", function () {
         var commentId = $(this).data("comment-id");
 
@@ -146,4 +143,3 @@
             });
         }
     });
-});
